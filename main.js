@@ -10,8 +10,9 @@
 
 let cellData = new Array(9).fill(null);
 
-const boardElement = document.querySelector('.board');
+// const boardElement = document.querySelector('.board');
 const cells = document.querySelectorAll('.cell');
+const nextGameButton = document.querySelector('.next-game');
 
 for (let i = 0; i < cells.length; i++){
     cells[i].addEventListener('click', () => {
@@ -22,11 +23,6 @@ for (let i = 0; i < cells.length; i++){
         }
     })
 }
-
-//how can you win??
-//-same column
-//-same row
-//diagonal 1 5 9 / 3 5 9
 
 const infoDiv = document.querySelector('.info');
 
@@ -46,11 +42,11 @@ const gameBoard = (() => {
                     infopara.textContent = 'Player 2 has Won!'
                 }
                 infoDiv.appendChild(infopara);
+                nextGameButton.removeAttribute('hidden');
             }
         }
     }
-    const checkWinner = () => { // returns the winner of there is one
-        //check for same row
+    const checkWinner = () => { // returns the winner if there is one
         if (cellData[0] === cellData[1] && cellData[1] === cellData[2] && cellData[0] != null) {
             return cellData[0];
         } else if (cellData[3] === cellData[4] && cellData[4] === cellData[5] && cellData[3] != null){
@@ -69,7 +65,13 @@ const gameBoard = (() => {
             return cellData[2]
         }
     }
-    return {add, checkWinner};
+    const reset = () => {
+        cellData = new Array(9).fill(null);
+        displayController.refresh();
+        infoDiv.innerHTML = '';
+        nextPlayer = 1;
+    }
+    return {add, checkWinner, reset};
 })();
 
 const displayController = (() => {
@@ -92,40 +94,10 @@ const players = (() => {
             nextPlayer = 1;
         }
     }
-    const console1 = () => {
-        alert(12);
-    }
-    return {toggleNext, console1};
+    return {toggleNext};
 })();
 
-// const drawBoard = function (cellId, markerType) {
-//
-// }
-
-//factory function example:
-
-// const Player = (name, level) => {
-//     let health = level * 2;
-//     const getLevel = () => level;
-//     const getName  = () => name;
-//     const die = () => {
-//         // uh oh
-//     };
-//     const damage = x => {
-//         health -= x;
-//         if (health <= 0) {
-//             die();
-//         }
-//     };
-//     const attack = enemy => {
-//         if (level < enemy.getLevel()) {
-//             damage(1);
-//             console.log(`${enemy.getName()} has damaged ${name}`);
-//         }
-//         if (level >= enemy.getLevel()) {
-//             enemy.damage(1);
-//             console.log(`${name} has damaged ${enemy.getName()}`);
-//         }
-//     };
-//     return {attack, damage, getLevel, getName};
-// };
+nextGameButton.addEventListener('click', () => {
+    nextGameButton.setAttribute('hidden', '');
+    gameBoard.reset();
+})
