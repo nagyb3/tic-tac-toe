@@ -1,18 +1,11 @@
-//modules:
-//gameBoard
-// displayController
-
-//factory functions:
-// players
-
 //cell id starts from 1
 //game starts with x making move
 
 let cellData = new Array(9).fill(null);
-
-// const boardElement = document.querySelector('.board');
 const cells = document.querySelectorAll('.cell');
 const nextGameButton = document.querySelector('.next-game');
+let nextPlayer = 1;
+const infoDiv = document.querySelector('.info');
 
 for (let i = 0; i < cells.length; i++){
     cells[i].addEventListener('click', () => {
@@ -23,8 +16,6 @@ for (let i = 0; i < cells.length; i++){
         }
     })
 }
-
-const infoDiv = document.querySelector('.info');
 
 const gameBoard = (() => {
     const add = (cellId, markerType) => {
@@ -83,8 +74,6 @@ const displayController = (() => {
     }
     return {refresh}
 })();
-
-let nextPlayer = 1;
 
 const players = (() => {
     const toggleNext = () => {
