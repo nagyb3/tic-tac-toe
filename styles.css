@@ -20,3 +20,45 @@
     box-sizing: border-box;
     border: 1px solid black;
 }
+
+.players {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 50px;
+}
+
+button.player {
+    padding: 15px;
+    font-size: 1.5rem;
+    background-color: lightskyblue;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    border: 0;
+}
+
+.score {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 0;
+    padding-top: 30px;
+}
+
+.infopara {
+    width: fit-content;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+}
+
+.next-game {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+div.button {
+    display: flex;
+    justify-content: center;
+}

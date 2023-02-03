@@ -1,20 +1,33 @@
 //cell id starts from 1
 //game starts with x making move
 
+// TODO: score counter
+
+//player1 and player2 should have their own objects, playerOne.name = 'Player1', playerOne.marker = 'X' ...;
+// playerOne.score = 3
+//
+
+
+
 let cellData = new Array(9).fill(null);
 const cells = document.querySelectorAll('.cell');
 const nextGameButton = document.querySelector('.next-game');
 let nextPlayer = 1;
 const infoDiv = document.querySelector('.info');
+let firstPlayerName = 'PLayer 1';
+let secondPlayerName = 'Player 2';
+let gameover = false;
 
 for (let i = 0; i < cells.length; i++){
-    cells[i].addEventListener('click', () => {
-        if (nextPlayer === 1) {
-            gameBoard.add(i + 1, "x");
-        } else {
-            gameBoard.add(i + 1, "o")
-        }
-    })
+        cells[i].addEventListener('click', () => {
+            if (gameover === false) {
+                if (nextPlayer === 1) {
+                    gameBoard.add(i + 1, "x");
+                } else {
+                    gameBoard.add(i + 1, "o")
+                }
+            }
+        })
 }
 
 const gameBoard = (() => {
@@ -28,12 +41,16 @@ const gameBoard = (() => {
             if (gameBoard.checkWinner() !== undefined) {
                 const infopara = document.createElement('p');
                 if (gameBoard.checkWinner() === 'x') {
-                    infopara.textContent = 'Player 1 has won!'
+                    infopara.textContent = `${firstPlayerName} has won!`;
                 } else if (gameBoard.checkWinner() === 'o') {
-                    infopara.textContent = 'Player 2 has Won!'
+                    infopara.textContent = `${secondPlayerName} has won!`;
+                } else if (gameBoard.checkWinner() === 'tie') {
+                    infopara.textContent = 'It\'s a tie!';
                 }
+                infopara.classList.add('infopara');
                 infoDiv.appendChild(infopara);
                 nextGameButton.removeAttribute('hidden');
+                gameover = true;
             }
         }
     }
@@ -54,6 +71,8 @@ const gameBoard = (() => {
             return cellData[0]
         } else if (cellData[2] === cellData[4] && cellData[4] === cellData[6] && cellData[2] != null) {
             return cellData[2]
+        } else if (cellData.includes(null) === false) {
+            return 'tie'
         }
     }
     const reset = () => {
@@ -61,6 +80,7 @@ const gameBoard = (() => {
         displayController.refresh();
         infoDiv.innerHTML = '';
         nextPlayer = 1;
+        gameover = false;
     }
     return {add, checkWinner, reset};
 })();
@@ -89,4 +109,17 @@ const players = (() => {
 nextGameButton.addEventListener('click', () => {
     nextGameButton.setAttribute('hidden', '');
     gameBoard.reset();
+})
+
+const firstPLayerButton = document.querySelector('button.first-player');
+const secondPlayerButton = document.querySelector('button.second-player');
+
+firstPLayerButton.addEventListener('click', () => {
+    firstPlayerName = prompt('first player name?');
+    firstPLayerButton.textContent = firstPlayerName;
+})
+
+secondPlayerButton.addEventListener('click', () => {
+    secondPlayerName = prompt('first player name?');
+    secondPlayerButton.textContent = secondPlayerName;
 })
