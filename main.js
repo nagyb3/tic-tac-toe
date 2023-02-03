@@ -3,19 +3,28 @@
 
 // TODO: score counter
 
-//player1 and player2 should have their own objects, playerOne.name = 'Player1', playerOne.marker = 'X' ...;
-// playerOne.score = 3
-//
+//new start
+function Player(name, marker) {
+    this.name = name;
+    this.marker = marker;
+    this.score = 0;
+}
+
+firstPlayer = new Player('Player 1', 'x');
+secondPlayer = new Player('Player 2', 'o');
 
 
+//end
 
 let cellData = new Array(9).fill(null);
 const cells = document.querySelectorAll('.cell');
 const nextGameButton = document.querySelector('.next-game');
 let nextPlayer = 1;
 const infoDiv = document.querySelector('.info');
-let firstPlayerName = 'PLayer 1';
-let secondPlayerName = 'Player 2';
+const firstPLayerButton = document.querySelector('button.first-player');
+const secondPlayerButton = document.querySelector('button.second-player');
+const firstPlayerScoreP = document.querySelector('.first-player-score');
+const secondPlayerScoreP = document.querySelector('.second-player-score');
 let gameover = false;
 
 for (let i = 0; i < cells.length; i++){
@@ -37,13 +46,17 @@ const gameBoard = (() => {
         if (cellData[cellId - 1] === null) {
             cellData[cellId - 1] = markerType;
             displayController.refresh()
-            players.toggleNext();
+            gameBoard.toggleNext();
             if (gameBoard.checkWinner() !== undefined) {
                 const infopara = document.createElement('p');
                 if (gameBoard.checkWinner() === 'x') {
-                    infopara.textContent = `${firstPlayerName} has won!`;
+                    infopara.textContent = `${firstPlayer.name} has won!`;
+                    firstPlayer.score = firstPlayer.score + 1;
+                    firstPlayerScoreP.textContent = firstPlayer.score;
                 } else if (gameBoard.checkWinner() === 'o') {
-                    infopara.textContent = `${secondPlayerName} has won!`;
+                    infopara.textContent = `${secondPlayer.name} has won!`;
+                    secondPlayer.score = secondPlayer.score + 1;
+                    secondPlayerScoreP.textContent = secondPlayer.score;
                 } else if (gameBoard.checkWinner() === 'tie') {
                     infopara.textContent = 'It\'s a tie!';
                 }
@@ -82,7 +95,14 @@ const gameBoard = (() => {
         nextPlayer = 1;
         gameover = false;
     }
-    return {add, checkWinner, reset};
+    const toggleNext = () => {
+        if (nextPlayer === 1) {
+            nextPlayer = 2;
+        } else if (nextPlayer === 2) {
+            nextPlayer = 1;
+        }
+    }
+    return {add, checkWinner, reset, toggleNext};
 })();
 
 const displayController = (() => {
@@ -95,31 +115,21 @@ const displayController = (() => {
     return {refresh}
 })();
 
-const players = (() => {
-    const toggleNext = () => {
-        if (nextPlayer === 1) {
-            nextPlayer = 2;
-        } else if (nextPlayer === 2) {
-            nextPlayer = 1;
-        }
-    }
-    return {toggleNext};
-})();
-
 nextGameButton.addEventListener('click', () => {
     nextGameButton.setAttribute('hidden', '');
     gameBoard.reset();
 })
 
-const firstPLayerButton = document.querySelector('button.first-player');
-const secondPlayerButton = document.querySelector('button.second-player');
+
+firstPLayerButton.textContent = firstPlayer.name;
+secondPlayerButton.textContent = secondPlayer.name;
 
 firstPLayerButton.addEventListener('click', () => {
-    firstPlayerName = prompt('first player name?');
-    firstPLayerButton.textContent = firstPlayerName;
+    firstPlayer.name = prompt('first player name?');
+    firstPLayerButton.textContent = firstPlayer.name;
 })
 
 secondPlayerButton.addEventListener('click', () => {
-    secondPlayerName = prompt('first player name?');
-    secondPlayerButton.textContent = secondPlayerName;
+    secondPlayer.name = prompt('first player name?');
+    secondPlayerButton.textContent = secondPlayer.name;
 })
